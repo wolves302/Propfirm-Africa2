@@ -271,7 +271,112 @@ async function memberResetPassword() {
       <section className="disclosure" id="disclaimer"><div><ShieldCheck size={22}/><div><strong>Affiliate and risk disclosure</strong><p>Some links on this website may be affiliate links. If you use them, the website owner may earn a commission at no additional cost to you. Sponsored placements and affiliate relationships should be clearly identified. Prop trading involves risk; challenge fees may be lost. Firm rules, prices, offers and payout terms can change. Always verify information directly with the provider. This directory does not provide financial advice and does not guarantee funding or payouts.</p></div></div></section>
     </main>
     <footer><a className="brand footer-brand" href="#"><span className="brand-mark">PF</span><span>PROPFIRM<span className="brand-accent"> AFRICA</span><small>THE PROP FIRM DIRECTORY</small></span></a><span>© {new Date().getFullYear()} PropFirm Africa. Independent comparison platform.</span></footer>
+{memberOpen && (
+  <div className="modal-backdrop" onMouseDown={e => {
+    if (e.target === e.currentTarget) setMemberOpen(false);
+  }}>
+    <section className="admin-modal">
+      <div className="admin-header">
+        <div>
+          <div className="eyebrow">PROPFIRM AFRICA MEMBERS</div>
+          <h2>{session ? 'Member account' : 'Join our community'}</h2>
+        </div>
+        <button className="icon-btn" onClick={() => setMemberOpen(false)}>
+          <X />
+        </button>
+      </div>
 
+      {session ? (
+        <div className="login-form">
+          <div className="login-icon"><Users size={25}/></div>
+          <h3>You're signed in!</h3>
+          <p>Your member rewards dashboard will be available here.</p>
+          <button className="btn btn-primary btn-full" onClick={async () => {
+            await supabase.auth.signOut();
+            setMemberOpen(false);
+            setNotice('Signed out successfully.');
+          }}>
+            Sign out
+          </button>
+        </div>
+      ) : (
+        <form className="login-form" onSubmit={
+          memberMode === 'signup' ? memberSignUp : memberSignIn
+        }>
+          <div className="login-icon"><Users size={25}/></div>
+
+          <h3>{memberMode === 'signup' ? 'Create your free account' : 'Member sign in'}</h3>
+          <p>
+            {memberMode === 'signup'
+              ? 'Join PropFirm Africa to access member benefits and rewards.'
+              : 'Welcome back to PropFirm Africa.'}
+          </p>
+
+          {memberMode === 'signup' && (
+            <label>
+              Your name
+              <input
+                value={memberName}
+                onChange={e => setMemberName(e.target.value)}
+                required
+                placeholder="Your name"
+              />
+            </label>
+          )}
+
+          <label>
+            Email
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              placeholder="you@example.com"
+            />
+          </label>
+
+          <label>
+            Password
+            <input
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              minLength="6"
+              placeholder="At least 6 characters"
+            />
+          </label>
+
+          <button className="btn btn-primary btn-full" disabled={authBusy}>
+            {authBusy
+              ? 'Please wait…'
+              : memberMode === 'signup'
+                ? 'Create account'
+                : 'Sign in'}
+          </button>
+
+          {memberMode === 'login' && (
+            <button type="button" className="text-button" onClick={memberResetPassword}>
+              Forgot password?
+            </button>
+          )}
+
+          <button
+            type="button"
+            className="text-button"
+            onClick={() => setMemberMode(
+              memberMode === 'signup' ? 'login' : 'signup'
+            )}
+          >
+            {memberMode === 'signup'
+              ? 'Already a member? Sign in'
+              : 'New here? Create a free account'}
+          </button>
+        </form>
+      )}
+    </section>
+  </div>
+)}  
     {notice && <div className="toast"><CheckCircle2 size={17}/>{notice}<button onClick={() => setNotice('')}><X size={15}/></button></div>}
 
     {adminOpen && <div className="modal-backdrop" onMouseDown={e => { if (e.target === e.currentTarget) setAdminOpen(false); }}>
