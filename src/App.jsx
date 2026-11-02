@@ -30,7 +30,9 @@ function App() {
   const [form, setForm] = useState(blankFirm);
   const [notice, setNotice] = useState('');
   const [mobileNav, setMobileNav] = useState(false);
-
+const [memberOpen, setMemberOpen] = useState(false);
+const [memberMode, setMemberMode] = useState('login');
+const [memberName, setMemberName] = useState('');
   async function loadFirms() {
     if (!supabase) { setFirms([]); setLoading(false); return; }
     setLoading(true);
