@@ -201,6 +201,9 @@ async function memberResetPassword() {
       </nav>
       <div className="top-actions">
         <button className="btn btn-ghost admin-trigger" onClick={() => setAdminOpen(true)}><LockKeyhole size={16}/> Admin</button>
+        <button className="btn btn-primary" onClick={() => setMemberOpen(true)}>
+  <Users size={16}/> Members
+</button>
         <button className="icon-btn mobile-menu" onClick={() => setMobileNav(!mobileNav)} aria-label="Toggle menu">{mobileNav ? <X/> : <Menu/>}</button>
       </div>
     </header>
