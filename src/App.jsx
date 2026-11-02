@@ -85,6 +85,56 @@ const [memberName, setMemberName] = useState('');
     setAuthBusy(false);
     setNotice(error ? error.message : 'Signed in. Checking administrator access…');
   }
+  
+async function memberSignUp(e) {
+  e.preventDefault();
+  setAuthBusy(true);
+
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: window.location.origin,
+      data: { display_name: memberName }
+    }
+  });
+
+  setAuthBusy(false);
+  setNotice(error ? error.message : 'Account created! Please check your email to verify your account.');
+}
+
+async function memberSignIn(e) {
+  e.preventDefault();
+  setAuthBusy(true);
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  setAuthBusy(false);
+
+  if (error) {
+    setNotice(error.message);
+  } else {
+    setMemberOpen(false);
+    setNotice('Welcome back!');
+  }
+}
+
+async function memberResetPassword() {
+  if (!email) {
+    setNotice('Enter your email address first.');
+    return;
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin
+  });
+
+  setNotice(error ? error.message : 'Password reset instructions sent. Check your email.');
+}
+  
   async function signOut() {
     await supabase.auth.signOut(); setAdminOpen(false); setNotice('Signed out.');
   }
