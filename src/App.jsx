@@ -222,7 +222,7 @@ async function memberResetPassword() {
           <div><strong>Global</strong><span>Firm coverage</span></div>
           <div><strong>Free</strong><span>To compare</span></div>
         </div>
-      </section>
+   s   </section>
 
       <section className="trust-strip">
         <span><ShieldCheck size={17}/> Compare key rules</span><span><TrendingUp size={17}/> Review account options</span><span><Tag size={17}/> Find available offers</span><span><Users size={17}/> Trader-led feedback</span>
